@@ -40,7 +40,6 @@ export default function ExercisesManager() {
 
   // Delete
   const remove = async (id) => {
-    if (!confirm("Delete this custom exercise?")) return;
     await fetch(`/api/custom-exercises/${id}`, { method: "DELETE" });
     load();
   };

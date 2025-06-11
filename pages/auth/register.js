@@ -13,7 +13,7 @@ export default function Register() {
       body: JSON.stringify(form),
     });
     if (res.ok) router.push("/auth/signin");
-    else alert("Registration failed");
+    else console.error("Registration failed");
   };
 
   return (

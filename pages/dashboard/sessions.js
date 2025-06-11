@@ -91,10 +91,8 @@ export default function WorkoutSessionsPage() {
               <button
                 className="btn-danger"
                 onClick={async () => {
-                  if (confirm("Delete this session?")) {
-                    await fetch(`/api/workout-sessions/${s.id}`, { method: "DELETE" });
-                    loadSessions();
-                  }
+                  await fetch(`/api/workout-sessions/${s.id}`, { method: "DELETE" });
+                  loadSessions();
                 }}
               >
                 Delete
