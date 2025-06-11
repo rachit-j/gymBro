@@ -23,6 +23,7 @@ export default function Layout({ children }) {
                 <Link href="/dashboard" legacyBehavior><a>Dashboard</a></Link>
                 <Link href="/dashboard/sessions" legacyBehavior><a>Sessions</a></Link>
                 <Link href="/dashboard/calendar" legacyBehavior><a>Calendar</a></Link>
+                <Link href="/dashboard/exercises" className="hover:underline">Exercises</Link>
                 <button onClick={() => signOut({ callbackUrl: "/" })}>
                   Sign Out
                 </button>
