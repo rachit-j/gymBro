@@ -1,3 +1,4 @@
+// pages/dashboard/calendar.js
 import { useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import { useSession, signOut } from "next-auth/react";
@@ -8,7 +9,7 @@ export default function WorkoutCalendar() {
   const [sessions, setSessions] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
 
-  // Load all sessions
+  // Load all sessions once user is authenticated
   useEffect(() => {
     if (session) {
       fetch("/api/workout-sessions")
@@ -17,21 +18,34 @@ export default function WorkoutCalendar() {
     }
   }, [session]);
 
+  // Helper to compare two dates in local time
+  const isSameDay = (a, b) =>
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate();
+
   // Filter for the chosen day
-  const formatDay = (d) => d.toISOString().split("T")[0];
-  const todaysSessions = sessions.filter(
-    (s) => formatDay(new Date(s.date)) === formatDay(selectedDate)
+  const todaysSessions = sessions.filter((s) =>
+    isSameDay(new Date(s.date), selectedDate)
   );
 
   return (
     <div style={{ margin: "2rem" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      {/* Header */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
         <h1 style={{ fontSize: "2rem" }}>Workout Calendar</h1>
         <button className="btn-secondary" onClick={() => signOut()}>
           Sign Out
         </button>
       </div>
 
+      {/* Calendar Card */}
       <div className="card" style={{ padding: "2rem", marginTop: "1rem" }}>
         <Calendar
           onChange={setSelectedDate}
@@ -40,6 +54,7 @@ export default function WorkoutCalendar() {
         />
       </div>
 
+      {/* Sessions List */}
       <div style={{ marginTop: "2rem" }}>
         <h2 style={{ fontSize: "1.5rem" }}>
           Sessions on {selectedDate.toDateString()}
@@ -49,8 +64,15 @@ export default function WorkoutCalendar() {
         ) : (
           <ul className="session-list">
             {todaysSessions.map((s) => (
-              <li key={s.id} className="session-item card" style={{ justifyContent: "space-between" }}>
-                <Link href={`/dashboard/sessions/${s.id}`} className="session-link">
+              <li
+                key={s.id}
+                className="session-item card"
+                style={{ justifyContent: "space-between", alignItems: "center" }}
+              >
+                <Link
+                  href={`/dashboard/sessions/${s.id}`}
+                  className="session-link"
+                >
                   {s.title}
                 </Link>
                 <span>📝 {s.exercises.length} exercise(s)</span>

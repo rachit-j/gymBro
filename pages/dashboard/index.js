@@ -34,20 +34,6 @@ export default function Dashboard() {
       <h2 style={{ fontSize: "1.75rem", marginBottom: "0.5rem" }}>
         Hello, {session.user.email}
       </h2>
-      <button
-        onClick={() => signOut()}
-        style={{
-          padding: "0.5rem 1rem",
-          background: "var(--color-primary)",
-          color: "#fff",
-          border: "none",
-          borderRadius: "var(--radius)",
-          cursor: "pointer",
-          marginBottom: "1.5rem",
-        }}
-      >
-        Sign Out
-      </button>
 
       <h3 style={{ marginBottom: "1rem" }}>Your Workout Sessions</h3>
       {sessions.length === 0 ? (

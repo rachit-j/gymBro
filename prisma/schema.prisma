@@ -12,6 +12,7 @@ model User {
   email           String           @unique
   password        String
   workoutSessions WorkoutSession[]
+  customExercises  CustomExercise[]
 }
 
 model WorkoutSession {
@@ -34,4 +35,18 @@ model Exercise {
   weight           Float
   note             String?
 }
+
+model CustomExercise {
+  id            String   @id @default(cuid())
+  user          User     @relation(fields: [userId], references: [id])
+  userId        String
+  name          String
+  defaultSets   Int?     
+  defaultReps   Int?     
+  defaultWeight Float?   
+  note          String?  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
 
