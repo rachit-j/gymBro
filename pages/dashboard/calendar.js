@@ -40,9 +40,6 @@ export default function WorkoutCalendar() {
         }}
       >
         <h1 style={{ fontSize: "2rem" }}>Workout Calendar</h1>
-        <button className="btn-secondary" onClick={() => signOut()}>
-          Sign Out
-        </button>
       </div>
 
       {/* Calendar Card */}

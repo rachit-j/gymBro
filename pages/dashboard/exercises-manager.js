@@ -63,9 +63,6 @@ export default function ExercisesManager() {
       {/* Header */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <h1 style={{ fontSize: "2rem" }}>Manage Custom Exercises</h1>
-        <button className="btn-secondary" onClick={() => signOut()}>
-          Sign Out
-        </button>
       </div>
 
       {/* Form */}

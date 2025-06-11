@@ -53,9 +53,6 @@ export default function ExercisesPage() {
         style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
       >
         <h1 style={{ fontSize: "2rem" }}>Exercises</h1>
-        <button className="btn-secondary" onClick={() => signOut()}>
-          Sign Out
-        </button>
       </div>
 
       {/* Tabs */}

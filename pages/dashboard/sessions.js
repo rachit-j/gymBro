@@ -36,9 +36,6 @@ export default function WorkoutSessionsPage() {
       {/* Page Header */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", margin: "1rem 0" }}>
         <h1 style={{ fontSize: "1.75rem" }}>Workout Sessions</h1>
-        <button className="btn-secondary" onClick={() => signOut()}>
-          Sign Out
-        </button>
       </div>
 
       {/* Create New Session */}
