@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 export default function Layout({ children }) {
   const { data: session } = useSession();
   const router = useRouter();
+  const year = new Date().getFullYear();
 
   return (
     <div>
@@ -34,10 +35,9 @@ export default function Layout({ children }) {
       <main>
         <div className="card">{children}</div>
       </main>
-
       <footer>
         <div className="footer-container">
-          <span>© {new Date().getFullYear()} gymBro</span>
+          <span>© {year} gymBro</span>
           <button onClick={() => router.back()}>← Back</button>
         </div>
       </footer>
