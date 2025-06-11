@@ -1,36 +1,61 @@
 // pages/auth/signin.js
-import { getCsrfToken } from "next-auth/react";
-import { useRouter }   from "next/router";
+import { getCsrfToken, signIn } from "next-auth/react";
+import { useState } from "react";
+import { useRouter } from "next/router";
 
 export default function SignIn({ csrfToken }) {
   const router = useRouter();
-  const { error } = router.query;
+  const [email, setEmail]       = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError]       = useState("");
 
-  // Map NextAuth error codes to user-friendly messages
-  const errorMessages = {
-    CredentialsSignin: "Invalid email or password.",
-    default:          "Unable to sign in. Please try again.",
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    const res = await signIn("credentials", {
+      redirect: false,
+      email,
+      password,
+    });
+
+    if (res.error) {
+      // show the error message inline
+      setError("Invalid email or password.");
+    } else {
+      // success → go home
+      router.push("/");
+    }
   };
-  const message = errorMessages[error] || (error ? errorMessages.default : null);
 
   return (
     <div className="form-card card">
       <h2>Sign In to gymBro</h2>
 
-      {message && (
-        <div className="form-error">
-          {message}
-        </div>
-      )}
+      {/* Inline error bar */}
+      {error && <div className="form-error">{error}</div>}
 
-      <form method="post" action="/api/auth/callback/credentials" className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {/* include CSRF token for credentials provider */}
         <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
 
         <label>Email</label>
-        <input name="email" type="email" required />
+        <input
+          name="email"
+          type="email"
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
         <label>Password</label>
-        <input name="password" type="password" required />
+        <input
+          name="password"
+          type="password"
+          required
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
         <button type="submit" className="btn-primary">
           Sign In
@@ -40,6 +65,11 @@ export default function SignIn({ csrfToken }) {
   );
 }
 
+// still fetch CSRF token for the Credentials provider
 export async function getServerSideProps(ctx) {
-  return { props: { csrfToken: await getCsrfToken(ctx) } };
+  return {
+    props: {
+      csrfToken: await getCsrfToken(ctx),
+    },
+  };
 }

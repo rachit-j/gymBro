@@ -1,9 +1,11 @@
+// pages/index.js
 import { useSession } from "next-auth/react";
-import Link from "next/link";
+import { useRouter }  from "next/router";
 import { useState, useEffect } from "react";
 
 export default function Home() {
   const { data: session } = useSession();
+  const router = useRouter();
   const [nextSession, setNextSession] = useState(null);
 
   useEffect(() => {
@@ -20,68 +22,75 @@ export default function Home() {
     }
   }, [session]);
 
+  const go = (path) => () => router.push(path);
+
   if (session) {
     const username = session.user.email.split("@")[0];
     return (
-      <div className="card" style={{ padding: "4rem 2rem", marginTop: "2rem", textAlign: "center" }}>
+      <div
+        className="card"
+        style={{ padding: "4rem 2rem", marginTop: "2rem", textAlign: "center" }}
+      >
         <h1 style={{ fontSize: "2rem", marginBottom: "1rem" }}>
           Welcome back, {username}!
         </h1>
 
         {nextSession ? (
           <p style={{ marginBottom: "1.5rem", fontSize: "1.1rem" }}>
-            Your next session: <strong>{nextSession.title}</strong><br/>
+            Your next session: <strong>{nextSession.title}</strong>
+            <br />
             on {new Date(nextSession.date).toLocaleDateString()}
           </p>
         ) : (
           <p style={{ marginBottom: "1.5rem", fontSize: "1.1rem" }}>
-            You have no upcoming sessions.<br/>
-            <Link href="/dashboard/sessions" className="text-violet-600 hover:underline">
+            You have no upcoming sessions.
+            <br />
+            <button
+              onClick={go("/dashboard/sessions")}
+              className="btn-secondary"
+              style={{ marginTop: "0.5rem" }}
+            >
               Create one now
-            </Link>
+            </button>
           </p>
         )}
 
         <div style={{ display: "flex", justifyContent: "center", gap: "1rem" }}>
-          <Link
-            href="/dashboard"
-            className="px-6 py-3 bg-violet-600 text-white rounded shadow hover:bg-violet-700 transition"
-          >
+          <button onClick={go("/dashboard")} className="btn-primary">
             Go to Dashboard
-          </Link>
-          <Link
-            href="/dashboard/calendar"
-            className="px-6 py-3 bg-white text-violet-600 border-2 border-violet-600 rounded shadow hover:bg-violet-50 transition"
-          >
+          </button>
+          <button onClick={go("/dashboard/calendar")} className="btn-secondary">
             View Calendar
-          </Link>
+          </button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="card" style={{ textAlign: "center", padding: "4rem 2rem", marginTop: "2rem" }}>
+    <div
+      className="card"
+      style={{ textAlign: "center", padding: "4rem 2rem", marginTop: "2rem" }}
+    >
       <h1 style={{ fontSize: "2.25rem", marginBottom: "1rem" }}>
         Welcome to gymBro
       </h1>
-      <p style={{ fontSize: "1.125rem", color: "var(--color-text)", marginBottom: "2rem" }}>
+      <p
+        style={{
+          fontSize: "1.125rem",
+          color: "var(--color-text)",
+          marginBottom: "2rem",
+        }}
+      >
         Manage, schedule, and track your gym workouts—all in one place.
       </p>
 
-      <Link
-        href="/auth/signin"
-        className="mr-4 inline-block px-6 py-3 bg-violet-600 text-white rounded shadow hover:bg-violet-700 transition"
-      >
+      <button onClick={go("/auth/signin")} className="btn-primary" style={{ marginRight: "1rem" }}>
         Sign In
-      </Link>
-
-      <Link
-        href="/auth/register"
-        className="inline-block px-6 py-3 bg-white text-violet-600 border-2 border-violet-600 rounded shadow hover:bg-violet-50 transition"
-      >
+      </button>
+      <button onClick={go("/auth/register")} className="btn-secondary">
         Sign Up
-      </Link>
+      </button>
     </div>
   );
 }
